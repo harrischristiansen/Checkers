@@ -30,24 +30,28 @@ $(function() {
 
 	$(".moveableSquare").droppable({
 		activeClass: "moveableSquare",
-		drop: function( event, ui ) {
+		accept: function(dropElem) {
+			return checkValidMove(dropElem,$(this));
+		},
+		drop: function(event, ui) {
 			movePiece(ui.draggable,$(this));
 		}
 	});
 });
 
 function movePiece(piece, square) {
-	checkValidMove(piece, square);
+	updateBoard(piece.attr('id'), square.attr('id').charAt(1), square.attr('id').charAt(2));
 	snapToMiddle(piece, square);
 }
 
 function checkValidMove(piece, square) {
-	pieceID = piece.attr('id');
 	currentRow = -1;
 	currentCol = -1;
 
+	pieceID = piece.attr('id');
+
 	for(var r=0;r<board.length;r++) { // Get Current Row/Col
-		for(var c=0;c<board.length;c++) {
+		for(var c=0;c<board[r].length;c++) {
 			if(board[r][c] == pieceID) {
 				currentRow = r;
 				currentCol = c;
@@ -57,17 +61,40 @@ function checkValidMove(piece, square) {
 		if(currentRow != -1) { break; }
 	}
 
+	// Get New Row/Col
 	newRow = parseInt(square.attr('id').charAt(1));
 	newCol = parseInt(square.attr('id').charAt(2));
 
-	if(piece.hasClass('whitePiece')) { // Can move 1->8
-		if(newRow<0 || )
-		return true;
+	console.log(pieceID);
+
+	// Check If Can Move
+	if(piece.hasClass('kingPiece')) { // Can move any direction
+		null;
+	} else if(piece.hasClass('whitePiece')) { // Can move 1->8
+		if(newRow<0 || newRow>7 || newRow-currentRow!=1) {
+			return false;
+		}
 	} else if(piece.hasClass('redPiece')) { // Can move 8->1
-		return true;
+		if(newRow<0 || newRow>7 || currentRow-newRow!=1) {
+			return false;
+		}
 	} else {
 		return false;
 	}
+
+	return true;
+}
+
+function updateBoard(pieceID, newRow, newCol) {
+	for(var r=0;r<board.length;r++) { // Get Current Row/Col
+		for(var c=0;c<board[r].length;c++) {
+			if(board[r][c] == pieceID) {
+				board[r][c] = 0;
+			}
+		}
+	}
+
+	board[newRow][newCol] = pieceID;
 }
 
 function snapToMiddle(dragger, target){
