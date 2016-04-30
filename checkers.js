@@ -65,7 +65,10 @@ function checkValidMove(piece, square) {
 	newRow = parseInt(square.attr('id').charAt(1));
 	newCol = parseInt(square.attr('id').charAt(2));
 
-	console.log(pieceID);
+	// Check If New Space Occupied
+	if(board[newRow][newCol] != 0) {
+		return false;
+	}
 
 	// Check If Can Move
 	if(piece.hasClass('kingPiece')) { // Can move any direction
