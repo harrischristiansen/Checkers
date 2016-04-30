@@ -41,12 +41,18 @@ Checkers - Stylesheet
 	-moz-border-radius: 20px;
 	margin-left: auto;
 	margin-right: auto;
+	background-size: contain; 
 }
 
 .whitePiece {
-	background-color: #FFFFFF;
+	/*background-color: #FFFFFF;*/
+	background-image: url("/Users/MehakVohra/Desktop/Checkers/images/redPiece.png");
+	bac
+
 }
 
 .redPiece {
-	background-color: red;
+	/*background-color: red;*/
+	background-image: url("/Users/MehakVohra/Desktop/Checkers/images/whitePiece.png");
+
 }
