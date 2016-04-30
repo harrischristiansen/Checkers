@@ -5,6 +5,17 @@ April 2016
 Checkers - Javascript
 */
 
+var board = [
+[0,1,0,1,0,1,0,1],
+[1,0,1,0,1,0,1,0],
+[0,1,0,1,0,1,0,1],
+[0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0],
+[2,0,2,0,2,0,2,0],
+[0,2,0,2,0,2,0,2],
+[2,0,2,0,2,0,2,0],
+];
+
 $(function() {
 	$(".redPiece").draggable( {
 		revert: "invalid",
@@ -26,7 +37,12 @@ $(function() {
 });
 
 function movePiece(piece, sqaure) {
+	checkValidMove(piece, square);
 	snapToMiddle(piece, square);
+}
+
+function checkValidMove(piece, square) {
+
 }
 
 function snapToMiddle(dragger, target){
