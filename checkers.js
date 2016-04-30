@@ -16,6 +16,9 @@ var board = [
 ["r9",0,"r10",0,"r11",0,"r12",0],
 ];
 
+var whiteScore = 0; // # Pieces White has taken from Red
+var redScore = 0; // # Pieces Red has taken from White
+
 var pieceToRemove = 0;
 
 $(function() {
@@ -31,7 +34,6 @@ $(function() {
 	});
 
 	$(".moveableSquare").droppable({
-		activeClass: "moveableSquare",
 		accept: function(dropElem) {
 			pieceToRemove = 0;
 			return checkValidMove(dropElem,$(this));
@@ -48,6 +50,7 @@ $(function() {
 function movePiece(piece, square) {
 	updateBoard(piece.attr('id'), square.attr('id').charAt(1), square.attr('id').charAt(2));
 	snapToMiddle(piece, square);
+	updateCheckersUI();
 }
 
 function checkValidMove(piece, square) {
@@ -71,6 +74,8 @@ function checkValidMove(piece, square) {
 	newRow = parseInt(square.attr('id').charAt(1));
 	newCol = parseInt(square.attr('id').charAt(2));
 
+	console.log(currentRow+", "+currentCol+", "+newRow+", "+newCol);
+
 	// Check If New Space Occupied
 	if(board[newRow][newCol] != 0) {
 		return false;
@@ -87,7 +92,7 @@ function checkValidMove(piece, square) {
 	} else if(piece.hasClass('whitePiece')) { // Can move 1->8
 		if(newRow-currentRow==2) {
 			pieceToRemove = board[(newRow+currentRow)/2][(newCol+currentCol)/2];
-			if(pieceToRemove[0] == pieceID[0]) {
+			if(pieceToRemove == 0 || pieceToRemove[0] == pieceID[0]) {
 				pieceToRemove = 0;
 				return false;
 			}
@@ -103,6 +108,10 @@ function checkValidMove(piece, square) {
 	} else if(piece.hasClass('redPiece')) { // Can move 8->1
 		if(currentRow-newRow==2) {
 			pieceToRemove = board[(newRow+currentRow)/2][(newCol+currentCol)/2];
+			if(pieceToRemove == 0 || pieceToRemove[0] == pieceID[0]) {
+				pieceToRemove = 0;
+				return false;
+			}
 			return true;
 		} else if(currentRow-newRow==1) {
 			pieceToRemove = 0;
@@ -128,6 +137,14 @@ function updateBoard(pieceID, newRow, newCol) {
 }
 
 function removePiece(pieceID) {
+	console.log("here");
+	// Update Score
+	if(pieceID.charAt(0) == "w") {
+		redScore++;
+	} else if(pieceID.charAt(0) == "r") {
+		whiteScore++;
+	}
+
 	for(var r=0;r<board.length;r++) { // Remove all occurances of pieceID
 		for(var c=0;c<board[r].length;c++) {
 			if(board[r][c] == pieceID) {
@@ -137,6 +154,11 @@ function removePiece(pieceID) {
 	}
 
 	$("#"+pieceID).remove();
+}
+
+function updateCheckersUI() {
+	$("#whiteScore").val(whiteScore);
+	$("#redScore").val(redScore);
 }
 
 function snapToMiddle(dragger, target){

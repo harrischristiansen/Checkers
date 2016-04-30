@@ -17,6 +17,7 @@ HTML, CSS, Javascript
 - [ ] Alternate Moves
 - [ ] Promotion To Kings
 - [ ] Check For Game Over
+- [ ] Restart Game Button
 - [ ] Serve Ads
 - [ ] Google Analytics
 
