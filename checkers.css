@@ -21,12 +21,7 @@ Checkers - Stylesheet
 	border: 1px solid #000000;
 }
 
-#checkersTable tr:nth-child(2n) td:nth-child(2n+1) {
-	background-color: #000000;
-	color: #FFFFFF;
-}
-
-#checkersTable tr:nth-child(2n+1) td:nth-child(2n) {
+#checkersTable .blackSquare {
 	background-color: #000000;
 	color: #FFFFFF;
 }
