@@ -16,6 +16,8 @@ var board = [
 ["r9",0,"r10",0,"r11",0,"r12",0],
 ];
 
+var pieceToRemove = 0;
+
 $(function() {
 	$(".redPiece").draggable( {
 		revert: "invalid",
@@ -31,10 +33,14 @@ $(function() {
 	$(".moveableSquare").droppable({
 		activeClass: "moveableSquare",
 		accept: function(dropElem) {
+			pieceToRemove = 0;
 			return checkValidMove(dropElem,$(this));
 		},
 		drop: function(event, ui) {
 			movePiece(ui.draggable,$(this));
+			if(pieceToRemove != 0) {
+				removePiece(pieceToRemove);
+			}
 		}
 	});
 });
@@ -70,26 +76,47 @@ function checkValidMove(piece, square) {
 		return false;
 	}
 
+	// Check If newRow and newCol withen board
+	if(newRow<0 || newRow>7 || newCol<0 || newCol>7) {
+		return false;
+	}
+
 	// Check If Can Move
 	if(piece.hasClass('kingPiece')) { // Can move any direction
-		null;
+		return true;
 	} else if(piece.hasClass('whitePiece')) { // Can move 1->8
-		if(newRow<0 || newRow>7 || newRow-currentRow!=1) {
-			return false;
+		if(newRow-currentRow==2) {
+			pieceToRemove = board[(newRow+currentRow)/2][(newCol+currentCol)/2];
+			if(pieceToRemove[0] == pieceID[0]) {
+				pieceToRemove = 0;
+				return false;
+			}
+			return true;
+		} else if(newRow-currentRow==1) {
+			pieceToRemove = 0;
+			if(pieceToRemove[0] == pieceID[0]) {
+				pieceToRemove = 0;
+				return false;
+			}
+			return true;
 		}
 	} else if(piece.hasClass('redPiece')) { // Can move 8->1
-		if(newRow<0 || newRow>7 || currentRow-newRow!=1) {
-			return false;
+		if(currentRow-newRow==2) {
+			pieceToRemove = board[(newRow+currentRow)/2][(newCol+currentCol)/2];
+			return true;
+		} else if(currentRow-newRow==1) {
+			pieceToRemove = 0;
+			return true;
 		}
 	} else {
 		return false;
 	}
 
-	return true;
+	return false;
 }
 
 function updateBoard(pieceID, newRow, newCol) {
-	for(var r=0;r<board.length;r++) { // Get Current Row/Col
+	for(var r=0;r<board.length;r++) { // Remove all occurances of pieceID
 		for(var c=0;c<board[r].length;c++) {
 			if(board[r][c] == pieceID) {
 				board[r][c] = 0;
@@ -98,6 +125,18 @@ function updateBoard(pieceID, newRow, newCol) {
 	}
 
 	board[newRow][newCol] = pieceID;
+}
+
+function removePiece(pieceID) {
+	for(var r=0;r<board.length;r++) { // Remove all occurances of pieceID
+		for(var c=0;c<board[r].length;c++) {
+			if(board[r][c] == pieceID) {
+				board[r][c] = 0;
+			}
+		}
+	}
+
+	$("#"+pieceID).remove();
 }
 
 function snapToMiddle(dragger, target){
