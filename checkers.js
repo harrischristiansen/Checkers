@@ -40,15 +40,13 @@ $(function() {
 		},
 		drop: function(event, ui) {
 			movePiece(ui.draggable,$(this));
-			if(pieceToRemove != 0) {
-				removePiece(pieceToRemove);
-			}
 		}
 	});
 });
 
 function movePiece(piece, square) {
 	updateBoard(piece.attr('id'), square.attr('id').charAt(1), square.attr('id').charAt(2));
+	removePieceIfNecessary(pieceToRemove);
 	snapToMiddle(piece, square);
 	updateCheckersUI();
 }
@@ -136,13 +134,15 @@ function updateBoard(pieceID, newRow, newCol) {
 	board[newRow][newCol] = pieceID;
 }
 
-function removePiece(pieceID) {
-	console.log("here");
+function removePieceIfNecessary(pieceID) {
+	if(pieceToRemove == 0) { return false; }
+
 	// Update Score
 	if(pieceID.charAt(0) == "w") {
-		redScore++;
+		redScore = redScore + 1;
 	} else if(pieceID.charAt(0) == "r") {
-		whiteScore++;
+		console.log("here");
+		whiteScore = whiteScore + 1;
 	}
 
 	for(var r=0;r<board.length;r++) { // Remove all occurances of pieceID
@@ -157,8 +157,8 @@ function removePiece(pieceID) {
 }
 
 function updateCheckersUI() {
-	$("#whiteScore").val(whiteScore);
-	$("#redScore").val(redScore);
+	$("#whiteScore").text(whiteScore);
+	$("#redScore").text(redScore);
 }
 
 function snapToMiddle(dragger, target){
