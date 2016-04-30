@@ -47,13 +47,13 @@ function checkValidMove(piece, square) {
 	currentCol = -1;
 
 	for(var r=0;r<board.length;r++) {
-		if(board[r].indexOf(query) !== -1){
+		if(board[r].indexOf(pieceID) !== -1){
 			//Found
 			break;
 		}
 	}
-	
-	newRow = parseInt(sqaure.attr('id').charAt(1));
+
+	newRow = parseInt(square.attr('id').charAt(1));
 	newCol = parseInt(square.attr('id').charAt(2));
 
 	if(piece.hasClass('whitePiece')) { // Can move A->H
