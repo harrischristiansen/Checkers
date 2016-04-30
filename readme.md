@@ -13,7 +13,7 @@ HTML, CSS, Javascript
 - [X] Make Pieces Draggable
 - [X] Restrict Where Pieces Can Be Dropped
 - [X] Allow Piece Capturing
-- [ ] Display Scores
+- [X] Display Scores
 - [ ] Alternate Moves
 - [ ] Promotion To Kings
 - [ ] Check For Game Over
