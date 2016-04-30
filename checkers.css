@@ -46,13 +46,13 @@ Checkers - Stylesheet
 
 .whitePiece {
 	/*background-color: #FFFFFF;*/
-	background-image: url("/Users/MehakVohra/Desktop/Checkers/images/redPiece.png");
+	background-image: url("images/redPiece.png");
 	bac
 
 }
 
 .redPiece {
 	/*background-color: red;*/
-	background-image: url("/Users/MehakVohra/Desktop/Checkers/images/whitePiece.png");
+	background-image: url("images/whitePiece.png");
 
 }
