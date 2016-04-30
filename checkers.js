@@ -6,14 +6,14 @@ Checkers - Javascript
 */
 
 var board = [
-[0,1,0,1,0,1,0,1],
-[1,0,1,0,1,0,1,0],
-[0,1,0,1,0,1,0,1],
+[0,"w1",0,"w2",0,"w3",0,"w4"],
+["w5",0,"w6",0,"w7",0,"w8",0],
+[0,"w9",0,"w10",0,"w11",0,"w12"],
 [0,0,0,0,0,0,0,0],
 [0,0,0,0,0,0,0,0],
-[2,0,2,0,2,0,2,0],
-[0,2,0,2,0,2,0,2],
-[2,0,2,0,2,0,2,0],
+["r1",0,"r2",0,"r3",0,"r4",0],
+[0,"r5",0,"r6",0,"r7",0,"r8"],
+["r9",0,"r10",0,"r11",0,"r12",0],
 ];
 
 $(function() {
@@ -28,8 +28,8 @@ $(function() {
 		cursor: "move",
 	});
 
-	$(".blackSquare").droppable({
-		activeClass: "blackSquare",
+	$(".moveableSquare").droppable({
+		activeClass: "moveableSquare",
 		drop: function( event, ui ) {
 			movePiece(ui.draggable,$(this));
 		}
@@ -42,7 +42,28 @@ function movePiece(piece, square) {
 }
 
 function checkValidMove(piece, square) {
+	pieceID = piece.attr('id');
+	currentRow = -1;
+	currentCol = -1;
 
+	for(var r=0;r<board.length;r++) {
+		if(board[r].indexOf(query) !== -1){
+			//Found
+			break;
+		}
+	}
+	
+	newRow = parseInt(sqaure.attr('id').charAt(1));
+	newCol = parseInt(square.attr('id').charAt(2));
+
+	if(piece.hasClass('whitePiece')) { // Can move A->H
+
+		return true;
+	} else if(piece.hasClass('redPiece')) { // Can move H->A
+		return true;
+	} else {
+		return false;
+	}
 }
 
 function snapToMiddle(dragger, target){
