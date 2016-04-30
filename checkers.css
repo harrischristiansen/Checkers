@@ -12,7 +12,9 @@ Checkers - Stylesheet
 	color: #000000;
 	font-size: 20px;
 	margin-left: auto;
-	margin-right: auto;
+	margin-right: auto; 
+	margin-top: 6%;
+	margin-bottom: auto; 
 }
 
 #checkersTable td {
@@ -47,8 +49,6 @@ Checkers - Stylesheet
 .whitePiece {
 	/*background-color: #FFFFFF;*/
 	background-image: url("images/redPiece.png");
-	bac
-
 }
 
 .redPiece {
