@@ -53,11 +53,11 @@ h1{
 
 .whitePiece {
 	/*background-color: #FFFFFF;*/
-	background-image: url("images/redPiece.png");
+	background-image: url("images/whitePiece.png");
 }
 
 .redPiece {
 	/*background-color: red;*/
-	background-image: url("images/whitePiece.png");
+	background-image: url("images/blackPiece.png");
 
 }
