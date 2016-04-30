@@ -46,20 +46,24 @@ function checkValidMove(piece, square) {
 	currentRow = -1;
 	currentCol = -1;
 
-	for(var r=0;r<board.length;r++) {
-		if(board[r].indexOf(pieceID) !== -1){
-			//Found
-			break;
+	for(var r=0;r<board.length;r++) { // Get Current Row/Col
+		for(var c=0;c<board.length;c++) {
+			if(board[r][c] == pieceID) {
+				currentRow = r;
+				currentCol = c;
+				break;
+			}
 		}
+		if(currentRow != -1) { break; }
 	}
 
 	newRow = parseInt(square.attr('id').charAt(1));
 	newCol = parseInt(square.attr('id').charAt(2));
 
-	if(piece.hasClass('whitePiece')) { // Can move A->H
-
+	if(piece.hasClass('whitePiece')) { // Can move 1->8
+		if(newRow<0 || )
 		return true;
-	} else if(piece.hasClass('redPiece')) { // Can move H->A
+	} else if(piece.hasClass('redPiece')) { // Can move 8->1
 		return true;
 	} else {
 		return false;
