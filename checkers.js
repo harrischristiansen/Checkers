@@ -36,7 +36,7 @@ $(function() {
 	});
 });
 
-function movePiece(piece, sqaure) {
+function movePiece(piece, square) {
 	checkValidMove(piece, square);
 	snapToMiddle(piece, square);
 }
