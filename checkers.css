@@ -88,9 +88,11 @@ h2 {
 }
 
 .whiteScore {
+	color: white;
 }
 
 .redScore {
+	color: #8B8989;
 }
 
 .left {
