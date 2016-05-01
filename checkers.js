@@ -92,7 +92,21 @@ function checkValidMove(piece, square) {
 
 	// Check If Can Move
 	if(piece.hasClass('kingPiece')) { // Can move any direction
-		return true;
+		if(Math.abs(newRow-currentRow)==2) {
+			pieceToRemove = board[(newRow+currentRow)/2][(newCol+currentCol)/2];
+			if(pieceToRemove == 0 || pieceToRemove[0] == pieceID[0]) {
+				pieceToRemove = 0;
+				return false;
+			}
+			return true;
+		} else if(Math.abs(newRow-currentRow)==1) {
+			pieceToRemove = 0;
+			if(pieceToRemove[0] == pieceID[0]) {
+				pieceToRemove = 0;
+				return false;
+			}
+			return true;
+		}
 	} else if(piece.hasClass('whitePiece')) { // Can move 1->8
 		if(newRow-currentRow==2) {
 			pieceToRemove = board[(newRow+currentRow)/2][(newCol+currentCol)/2];
@@ -132,6 +146,7 @@ function movePiece(piece, square) {
 	updateBoard(piece.attr('id'), square.attr('id').charAt(1), square.attr('id').charAt(2));
 	updateTurnIfNecessary(piece.attr('id')[0]);
 	removePieceIfNecessary(pieceToRemove);
+	promoteToKingIfNecessary(piece, square.attr('id').charAt(1));
 	snapToMiddle(piece, square);
 	updateCheckersUI();
 }
@@ -180,6 +195,12 @@ function removePieceIfNecessary(pieceID) {
 	}
 
 	$("#"+pieceID).remove();
+}
+
+function promoteToKingIfNecessary(piece, newRow) {
+	if(newRow==0 || newRow==7) {
+		piece.addClass("kingPiece");
+	}
 }
 
 function updateCheckersUI() {
