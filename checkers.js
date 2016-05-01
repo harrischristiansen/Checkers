@@ -21,6 +21,8 @@ var redScore = 0; // # Pieces Red has taken from White
 
 var pieceToRemove = 0;
 
+var currentTurn = 0; // 0=White, 1=Red
+
 $(function() {
 	$(".redPiece").draggable( {
 		revert: "invalid",
@@ -44,18 +46,17 @@ $(function() {
 	});
 });
 
-function movePiece(piece, square) {
-	updateBoard(piece.attr('id'), square.attr('id').charAt(1), square.attr('id').charAt(2));
-	removePieceIfNecessary(pieceToRemove);
-	snapToMiddle(piece, square);
-	updateCheckersUI();
-}
-
 function checkValidMove(piece, square) {
 	currentRow = -1;
 	currentCol = -1;
 
 	pieceID = piece.attr('id');
+
+	if(pieceID[0] == "w" && currentTurn != 0) {
+		return false;
+	} else if(pieceID[0] == "r" && currentTurn != 1) {
+		return false;
+	}
 
 	for(var r=0;r<board.length;r++) { // Get Current Row/Col
 		for(var c=0;c<board[r].length;c++) {
@@ -127,6 +128,14 @@ function checkValidMove(piece, square) {
 	return false;
 }
 
+function movePiece(piece, square) {
+	updateBoard(piece.attr('id'), square.attr('id').charAt(1), square.attr('id').charAt(2));
+	updateTurnIfNecessary(piece.attr('id')[0]);
+	removePieceIfNecessary(pieceToRemove);
+	snapToMiddle(piece, square);
+	updateCheckersUI();
+}
+
 function updateBoard(pieceID, newRow, newCol) {
 	for(var r=0;r<board.length;r++) { // Remove all occurances of pieceID
 		for(var c=0;c<board[r].length;c++) {
@@ -137,6 +146,18 @@ function updateBoard(pieceID, newRow, newCol) {
 	}
 
 	board[newRow][newCol] = pieceID;
+}
+
+function updateTurnIfNecessary(pieceColor) {
+	if(pieceToRemove != 0) { return false; }
+
+	if(pieceColor == "w") {
+		currentTurn = 1;
+		$("#currentTurn").text("Black");
+	} else if(pieceColor == "r") {
+		currentTurn = 0;
+		$("#currentTurn").text("White");
+	}
 }
 
 function removePieceIfNecessary(pieceID) {
