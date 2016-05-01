@@ -78,6 +78,15 @@ h2 {
 	background-image: url("images/blackPiece.png");
 
 }
+
+.kingPiece.redPiece {
+	background-image: url("images/kingPieceRed.png");  
+}
+
+.kingPiece.whitePiece {
+	background-image: url("images/kingPieceWhite.png");  
+}
+
 .whiteScore {
 }
 
