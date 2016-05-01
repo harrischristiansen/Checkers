@@ -84,6 +84,11 @@ function checkValidMove(piece, square) {
 		return false;
 	}
 
+	// Move Max 2 Spaces
+	if(Math.abs(currentCol-newCol) > 2) {
+		return false;
+	}
+
 	// Check If Can Move
 	if(piece.hasClass('kingPiece')) { // Can move any direction
 		return true;
