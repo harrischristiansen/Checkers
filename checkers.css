@@ -20,6 +20,23 @@ Checkers - Stylesheet
 h1{
 	color: white;
 	text-align: center; 
+	font-family: 'Fjalla One', sans-serif;
+	font-size: 40px;
+}
+
+
+h2 {
+	font-family: 'Fjalla One', sans-serif;
+	text-align: center;
+	font-size: 30px; 
+}
+
+.h2-white{
+	color: white;
+}
+
+.h2-red{
+	color: #8B8989;
 }
 
 #checkersTable td {
@@ -62,11 +79,9 @@ h1{
 
 }
 .whiteScore {
-
 }
 
 .redScore {
-	
 }
 
 .left {
@@ -77,47 +92,55 @@ h1{
  float:right;
 }
 
-.center {
- position: relative;
- left: 50%;
-}
-
 .mid-page {
 	padding-top: 10%; 
 }
 
 .container {
-  padding-right: 15px;
-  padding-left: 15px;
   margin-right: auto;
   margin-left: auto;
 }
 
 @media (min-width: 1200px) {
+	.col-sm-2 {
+		width: 16.66666667%;
+	}
+}
+
+@media (min-width: 992px) {
+	.col-md-2 {
+		width: 16.66666667%;
+	}
+}
+
+@media (min-width: 768px) {
+	.col-lg-2 {
+		width: 16.66666667%;
+	}
+}
+
+@media (min-width: 1200px) {
 	.col-sm-3 {
 		width: 25%;
-		padding-left: 5%
 	}
 }
 
 @media (min-width: 992px) {
 	.col-md-3 {
 		width: 25%;
-		padding-left: 5%
 	}
 }
 
 @media (min-width: 768px) {
 	.col-lg-3 {
 		width: 25%;
-		padding-left: 5%;
 	}
 }
 
 @media (min-width: 1200px) {
 	.col-sm-6 {
 		width: 50%;
-		padding-left: 20%;
+		padding-left: 25%;
 
 	}
 }
@@ -125,14 +148,14 @@ h1{
 @media (min-width: 992px) {
 	.col-md-6 {
 		width: 50%;
-		padding-left: 20%;
+		padding-left: 25%;
 	}
 }
 
 @media (min-width: 768px) {
 	.col-lg-6 {
 		width: 50%;
-		padding-left: 20%;
+		padding-left: 25%;
 	}
 }
 
@@ -141,4 +164,12 @@ h1{
   padding-left: 15px;
   margin-right: auto;
   margin-left: auto;
+}
+
+.rotate {
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  transform: rotate(180deg);
 }
