@@ -18,7 +18,7 @@ Checkers - Stylesheet
 }
 
 h1{
-	color: white;
+	color: #190000;
 	text-align: center; 
 	font-family: 'Fjalla One', sans-serif;
 	font-size: 40px;
@@ -33,10 +33,17 @@ h2 {
 
 .h2-white{
 	color: white;
+	text-align: center;
 }
 
 .h2-red{
 	color: #8B8989;
+	text-align: center;
+}
+
+.h2-turn {
+	color: #2f1919;
+	text-align: center;
 }
 
 #checkersTable td {
@@ -104,7 +111,7 @@ h2 {
 }
 
 .mid-page {
-	padding-top: 10%; 
+	padding-top: 5%; 
 }
 
 .container {

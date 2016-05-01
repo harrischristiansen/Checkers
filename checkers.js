@@ -169,9 +169,11 @@ function updateTurnIfNecessary(pieceColor) {
 	if(pieceColor == "w") {
 		currentTurn = 1;
 		$("#currentTurn").text("Black");
+		$("#currentTurn").css("color", "#8B8989");
 	} else if(pieceColor == "r") {
 		currentTurn = 0;
 		$("#currentTurn").text("White");
+		$("#currentTurn").css("color", "white");
 	}
 }
 
