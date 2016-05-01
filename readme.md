@@ -14,8 +14,8 @@ HTML, CSS, Javascript
 - [X] Restrict Where Pieces Can Be Dropped
 - [X] Allow Piece Capturing
 - [X] Display Scores
-- [ ] Alternate Moves
-- [ ] Promotion To Kings
+- [X] Alternate Moves
+- [X] Promotion To Kings
 - [ ] Check For Game Over
 - [ ] Restart Game Button
 - [ ] Serve Ads

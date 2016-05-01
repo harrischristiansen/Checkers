@@ -21,6 +21,8 @@ var redScore = 0; // # Pieces Red has taken from White
 
 var pieceToRemove = 0;
 
+var currentTurn = 0; // 0=White, 1=Red
+
 $(function() {
 	$(".redPiece").draggable( {
 		revert: "invalid",
@@ -44,18 +46,17 @@ $(function() {
 	});
 });
 
-function movePiece(piece, square) {
-	updateBoard(piece.attr('id'), square.attr('id').charAt(1), square.attr('id').charAt(2));
-	removePieceIfNecessary(pieceToRemove);
-	snapToMiddle(piece, square);
-	updateCheckersUI();
-}
-
 function checkValidMove(piece, square) {
 	currentRow = -1;
 	currentCol = -1;
 
 	pieceID = piece.attr('id');
+
+	if(pieceID[0] == "w" && currentTurn != 0) {
+		return false;
+	} else if(pieceID[0] == "r" && currentTurn != 1) {
+		return false;
+	}
 
 	for(var r=0;r<board.length;r++) { // Get Current Row/Col
 		for(var c=0;c<board[r].length;c++) {
@@ -84,9 +85,28 @@ function checkValidMove(piece, square) {
 		return false;
 	}
 
+	// Move Max 2 Spaces
+	if(Math.abs(currentCol-newCol) > 2) {
+		return false;
+	}
+
 	// Check If Can Move
 	if(piece.hasClass('kingPiece')) { // Can move any direction
-		return true;
+		if(Math.abs(newRow-currentRow)==2) {
+			pieceToRemove = board[(newRow+currentRow)/2][(newCol+currentCol)/2];
+			if(pieceToRemove == 0 || pieceToRemove[0] == pieceID[0]) {
+				pieceToRemove = 0;
+				return false;
+			}
+			return true;
+		} else if(Math.abs(newRow-currentRow)==1) {
+			pieceToRemove = 0;
+			if(pieceToRemove[0] == pieceID[0]) {
+				pieceToRemove = 0;
+				return false;
+			}
+			return true;
+		}
 	} else if(piece.hasClass('whitePiece')) { // Can move 1->8
 		if(newRow-currentRow==2) {
 			pieceToRemove = board[(newRow+currentRow)/2][(newCol+currentCol)/2];
@@ -122,6 +142,15 @@ function checkValidMove(piece, square) {
 	return false;
 }
 
+function movePiece(piece, square) {
+	updateBoard(piece.attr('id'), square.attr('id').charAt(1), square.attr('id').charAt(2));
+	updateTurnIfNecessary(piece.attr('id')[0]);
+	removePieceIfNecessary(pieceToRemove);
+	promoteToKingIfNecessary(piece, square.attr('id').charAt(1));
+	snapToMiddle(piece, square);
+	updateCheckersUI();
+}
+
 function updateBoard(pieceID, newRow, newCol) {
 	for(var r=0;r<board.length;r++) { // Remove all occurances of pieceID
 		for(var c=0;c<board[r].length;c++) {
@@ -132,6 +161,18 @@ function updateBoard(pieceID, newRow, newCol) {
 	}
 
 	board[newRow][newCol] = pieceID;
+}
+
+function updateTurnIfNecessary(pieceColor) {
+	if(pieceToRemove != 0) { return false; }
+
+	if(pieceColor == "w") {
+		currentTurn = 1;
+		$("#currentTurn").text("Black");
+	} else if(pieceColor == "r") {
+		currentTurn = 0;
+		$("#currentTurn").text("White");
+	}
 }
 
 function removePieceIfNecessary(pieceID) {
@@ -154,6 +195,12 @@ function removePieceIfNecessary(pieceID) {
 	}
 
 	$("#"+pieceID).remove();
+}
+
+function promoteToKingIfNecessary(piece, newRow) {
+	if(newRow==0 || newRow==7) {
+		piece.addClass("kingPiece");
+	}
 }
 
 function updateCheckersUI() {
