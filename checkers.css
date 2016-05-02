@@ -18,7 +18,7 @@ Checkers - Stylesheet
 }
 
 h1{
-	color: #8c7f7f;
+	color: #C67171;
 	text-align: center; 
 	font-family: 'Fjalla One', sans-serif;
 	font-size: 40px;
@@ -31,18 +31,25 @@ h2 {
 	font-size: 30px; 
 }
 
+h3 {
+	font-family: 'Fjalla One', sans-serif;
+	text-align: justify;
+	font-size: 20px;
+	color: #DCDCDC;
+}
+
 .h2-white{
 	color: white;
 	text-align: center;
 }
 
 .h2-red{
-	color: #8B8989;
+	color: #8C8C8C;
 	text-align: center;
 }
 
 .h2-turn {
-	color: #a39999;
+	color: #C67171;
 	text-align: center;
 }
 
@@ -83,7 +90,6 @@ h2 {
 .redPiece {
 	/*background-color: red;*/
 	background-image: url("images/blackPiece.png");
-
 }
 
 .kingPiece.redPiece {
@@ -99,7 +105,7 @@ h2 {
 }
 
 .redScore {
-	color: #8B8989;
+	color: #8C8C8C;
 }
 
 .left {
