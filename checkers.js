@@ -94,7 +94,7 @@ function checkValidMove(piece, square) {
 	if(piece.hasClass('kingPiece')) { // Can move any direction
 		if(Math.abs(newRow-currentRow)==2) {
 			pieceToRemove = board[(newRow+currentRow)/2][(newCol+currentCol)/2];
-			if(pieceToRemove == 0 || pieceToRemove[0] == pieceID[0]) {
+			if(pieceToRemove == 0 || pieceToRemove[0] == pieceID[0]) { // Cannot jump over nothing or own pieces
 				pieceToRemove = 0;
 				return false;
 			}
@@ -110,7 +110,7 @@ function checkValidMove(piece, square) {
 	} else if(piece.hasClass('whitePiece')) { // Can move 1->8
 		if(newRow-currentRow==2) {
 			pieceToRemove = board[(newRow+currentRow)/2][(newCol+currentCol)/2];
-			if(pieceToRemove == 0 || pieceToRemove[0] == pieceID[0]) {
+			if(pieceToRemove == 0 || pieceToRemove[0] == pieceID[0]) { // Cannot jump over nothing or own pieces
 				pieceToRemove = 0;
 				return false;
 			}
@@ -126,7 +126,7 @@ function checkValidMove(piece, square) {
 	} else if(piece.hasClass('redPiece')) { // Can move 8->1
 		if(currentRow-newRow==2) {
 			pieceToRemove = board[(newRow+currentRow)/2][(newCol+currentCol)/2];
-			if(pieceToRemove == 0 || pieceToRemove[0] == pieceID[0]) {
+			if(pieceToRemove == 0 || pieceToRemove[0] == pieceID[0]) { // Cannot jump over nothing or own pieces
 				pieceToRemove = 0;
 				return false;
 			}
