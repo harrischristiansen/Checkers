@@ -49,9 +49,11 @@ $(function() {
 	});
 });
 
+// =============== Process Move =============== //
+
 function movePiece(piece, square) {
 	updateBoard(piece.attr('id'), square.attr('id')[1], square.attr('id')[2]);
-	updateTurnIfNecessary(piece, square.attr('id')[1], square.attr('id')[2]);
+	updateTurnIfNecessary(piece);
 	removePieceIfNecessary();
 	promoteToKingIfNecessary(piece, square.attr('id')[1]);
 	snapToMiddle(piece, square);
@@ -60,50 +62,16 @@ function movePiece(piece, square) {
 }
 
 function updateBoard(pieceID, newRow, newCol) {
-	for(var r=0;r<board.length;r++) { // Remove all occurances of pieceID
-		for(var c=0;c<board[r].length;c++) {
-			if(board[r][c] == pieceID) {
-				board[r][c] = 0;
-			}
-		}
-	}
-
+	removePieceFromBoard(pieceID);
 	board[newRow][newCol] = pieceID;
 }
 
-function updateTurnIfNecessary(piece, newRow, newCol) {
+function updateTurnIfNecessary(piece) {
+	pieceID = piece.attr('id');
 	if (pieceToRemove != 0) { // Jumped over piece, check if another jump available
-		if (newRow <= 1 || newRow >= 6) { // Check outer board boundry
-			return false;
-		}
-		
-		var targetRow = -1;
-		var targetCol = [parseInt(newCol)-2, parseInt(newCol)+2];
-		
-		if (currentTurn == 0) { // Whites turn, moving toward 7
-			targetRow = newRow + 2;
-		} else if (currentTurn == 1) { // Blacks turn, moving toward 0
-			targetRow = newRow - 2;
-		}
-		// TODO: targetRow->array for king
-		
-		var targetSquare1, targetSquare2;
-		if (targetRow>=0 && targetRow<8) { // Target withen inner board
-			console.log("1: "+targetCol[0]);
-			if (targetCol[0]>=0 && targetCol[0]<8) {
-				console.log("2");
-				targetSquare1 = getSquare(targetRow, targetCol[0]);
-			}
-			console.log("3: "+targetCol[1]);
-			if (targetCol[1]>=0 && targetCol[1]<8) {
-				console.log("4");
-				targetSquare2 = getSquare(targetRow, targetCol[1]);
-			}
-		}
-		
-		console.log("targetSquare2: ("+newRow+","+newCol+") ("+piece+","+targetSquare2+") "+checkValidMoveKeepPieceToRemove(piece, targetSquare2));
-		
-		if (checkValidMoveKeepPieceToRemove(piece, targetSquare1) || checkValidMoveKeepPieceToRemove(piece, targetSquare2)) {
+		console.log("Checking if available jump");
+		if (doesPieceHaveAvailableJump(pieceID)) {
+			console.log("Jump available, dont update turn");
 			return false;
 		}
 	}
@@ -121,14 +89,7 @@ function removePieceIfNecessary() {
 		whiteScore = whiteScore + 1;
 	}
 
-	for(var r=0;r<board.length;r++) { // Remove all occurances of pieceToRemove
-		for(var c=0;c<board[r].length;c++) {
-			if(board[r][c] == pieceToRemove) {
-				board[r][c] = 0;
-			}
-		}
-	}
-
+	removePieceFromBoard(pieceToRemove);
 	$("#"+pieceToRemove).remove();
 }
 
@@ -201,14 +162,14 @@ function startOver() {
 function checkValidMoveKeepPieceToRemove(piece, square) {
 	var pieceToRemoveTemp = pieceToRemove;
 	var validMove = checkValidMove(piece, square);
+	if (pieceToRemove == pieceToRemoveTemp) {
+		return false;
+	}
 	pieceToRemove = pieceToRemoveTemp;
 	return validMove;
 }
 
 function checkValidMove(piece, square) {
-	currentRow = -1;
-	currentCol = -1;
-
 	pieceID = piece.attr('id');
 	
 	// No Piece or Target Square
@@ -222,53 +183,44 @@ function checkValidMove(piece, square) {
 	}
 
 	 // Wrong Color Turn
-	if(pieceID[0] == "w" && currentTurn != 0) {
+	if (pieceID[0] == "w" && currentTurn != 0) {
 		return false;
-	} else if(pieceID[0] == "r" && currentTurn != 1) {
+	} else if (pieceID[0] == "r" && currentTurn != 1) {
 		return false;
 	}
 
 	// Get current row/col of piece being moved
-	for(var r=0;r<board.length;r++) {
-		for(var c=0;c<board[r].length;c++) {
-			if(board[r][c] == pieceID) {
-				currentRow = r;
-				currentCol = c;
-				break;
-			}
-		}
-		if(currentRow != -1) { break; }
-	}
+	var position = getPiecePosition(pieceID);
 
 	// Get new row/col
 	newRow = parseInt(square.attr('id')[1]);
 	newCol = parseInt(square.attr('id')[2]);
 
 	// Check if newRow and newCol within board
-	if(newRow<0 || newRow>7 || newCol<0 || newCol>7) {
+	if (newRow<0 || newRow>7 || newCol<0 || newCol>7) {
 		return false;
 	}
 	
 	// Check if new space occupied
-	if(board[newRow][newCol] != 0) {
+	if (board[newRow][newCol] != 0) {
 		return false;
 	}
 
 	// Move Max 2 Spaces
-	if(Math.abs(currentCol-newCol) > 2) {
+	if (Math.abs(position.col-newCol) > 2) {
 		return false;
 	}
 
 	// Check If Can Move
-	if(piece.hasClass('kingPiece')) { // Can move any direction
-		if(Math.abs(newRow-currentRow)==2) {
-			pieceToRemove = board[(newRow+currentRow)/2][(newCol+currentCol)/2];
+	if (piece.hasClass('kingPiece')) { // Can move any direction
+		if (Math.abs(newRow-position.row) == 2) {
+			pieceToRemove = board[(newRow+position.row)/2][(newCol+position.col)/2];
 			if(pieceToRemove == 0 || pieceToRemove[0] == pieceID[0]) {
 				pieceToRemove = 0;
 				return false;
 			}
 			return true;
-		} else if(Math.abs(newRow-currentRow)==1) {
+		} else if (Math.abs(newRow-position.row) == 1) {
 			pieceToRemove = 0;
 			if(pieceToRemove[0] == pieceID[0]) {
 				pieceToRemove = 0;
@@ -276,31 +228,31 @@ function checkValidMove(piece, square) {
 			}
 			return true;
 		}
-	} else if(piece.hasClass('whitePiece')) { // Can move 0->7
-		if(newRow-currentRow==2) {
-			pieceToRemove = board[(newRow+currentRow)/2][(newCol+currentCol)/2];
+	} else if (piece.hasClass('whitePiece')) { // Can move 0->7
+		if (newRow-position.row == 2) {
+			pieceToRemove = board[(newRow+position.row)/2][(newCol+position.col)/2];
 			if(pieceToRemove == 0 || pieceToRemove[0] == pieceID[0]) {
 				pieceToRemove = 0;
 				return false;
 			}
 			return true;
-		} else if(newRow-currentRow==1) {
+		} else if (newRow-position.row==1) {
 			pieceToRemove = 0;
-			if(pieceToRemove[0] == pieceID[0]) {
+			if (pieceToRemove[0] == pieceID[0]) {
 				pieceToRemove = 0;
 				return false;
 			}
 			return true;
 		}
-	} else if(piece.hasClass('redPiece')) { // Can move 7->0
-		if(currentRow-newRow==2) {
-			pieceToRemove = board[(newRow+currentRow)/2][(newCol+currentCol)/2];
-			if(pieceToRemove == 0 || pieceToRemove[0] == pieceID[0]) {
+	} else if (piece.hasClass('redPiece')) { // Can move 7->0
+		if (position.row-newRow == 2) {
+			pieceToRemove = board[(newRow+position.row)/2][(newCol+position.col)/2];
+			if (pieceToRemove == 0 || pieceToRemove[0] == pieceID[0]) {
 				pieceToRemove = 0;
 				return false;
 			}
 			return true;
-		} else if(currentRow-newRow==1) {
+		} else if (position.row-newRow == 1) {
 			pieceToRemove = 0;
 			return true;
 		}
@@ -311,9 +263,104 @@ function checkValidMove(piece, square) {
 	return false;
 }
 
+// =============== HTML Element Manipulation =============== //
+
 function getSquare(row, col) {
-	//return $('#checkersTable tr:eq('+row+') td:eq('+col+')');
-	var square = $('_'+row+col);
-	console.log("Square: "+square);
-	return square;
+	return $('#_'+row+col);
+}
+
+function getPieceByID(pieceID) {
+	return $('#'+pieceID);
+}
+
+// =============== Board State Updates/Validation =============== //
+
+function getPiecePosition(pieceID) {
+	row = -1;
+	col = -1;
+	
+	for (var r = 0; r < board.length; r++) {
+		for (var c = 0; c < board[r].length; c++) {
+			if (board[r][c] == pieceID) {
+				row = r;
+				col = c;
+				break;
+			}
+		}
+		if (row != -1) { break; }
+	}
+	
+	return {
+        row: row,
+        col: col
+    };
+}
+
+function getPieceTargetRows(pieceID, includeSingle=true, includeDouble=true) {
+	var piece = getPieceByID(pieceID);
+	var position = getPiecePosition(pieceID);
+	var targetRows = [];
+	
+	if (includeDouble && position.row > 1 && (piece.hasClass('kingPiece') || piece.hasClass('redPiece'))) { // Can move 7->0
+		targetRows.push(position.row - 2);
+	}
+	if (includeSingle && position.row > 0 && (piece.hasClass('kingPiece') || piece.hasClass('redPiece'))) { // Can move 7->0
+		targetRows.push(position.row - 1);
+	}
+	if (includeSingle && position.row < 7 && (piece.hasClass('kingPiece') || piece.hasClass('whitePiece'))) { // Can move 0->7
+		targetRows.push(position.row + 1);
+	}
+	if (includeDouble && position.row < 6 && (piece.hasClass('kingPiece') || piece.hasClass('whitePiece'))) { // Can move 0->7
+		targetRows.push(position.row + 2);
+	}
+	
+	return targetRows;
+}
+
+function getPieceTargetCols(pieceID, includeSingle=true, includeDouble=true) {
+	var position = getPiecePosition(pieceID);
+	var targetCols = [];
+	
+	if (includeDouble && position.col > 1) {
+		targetCols.push(position.col - 2);
+	}
+	if (includeSingle && position.col > 0) {
+		targetCols.push(position.col - 1);
+	}
+	if (includeSingle && position.col < 7) {
+		targetCols.push(position.col + 1);
+	}
+	if (includeDouble && position.col < 6) {
+		targetCols.push(position.col + 2);
+	}
+	
+	return targetCols;
+}
+
+function removePieceFromBoard(pieceID) {
+	for (var r=0; r<board.length; r++) { // Remove all occurances of pieceID
+		for (var c=0; c<board[r].length; c++) {
+			if (board[r][c] == pieceID) {
+				board[r][c] = 0;
+			}
+		}
+	}
+}
+
+function doesPieceHaveAvailableJump(pieceID) {
+	var piece = getPieceByID(pieceID);
+	var position = getPiecePosition(pieceID);
+	
+	var targetRows = getPieceTargetRows(pieceID, includeSingle=false);
+	var targetCols = getPieceTargetCols(pieceID, includeSingle=false);
+	
+	for (var r in targetRows) {
+		for (var c in targetCols) {
+			target = getSquare(targetRows[r], targetCols[c]);
+			if (checkValidMoveKeepPieceToRemove(piece, target)) {
+				return true;
+			}
+		}
+	}
+	return false;
 }
