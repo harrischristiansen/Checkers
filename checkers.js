@@ -16,7 +16,7 @@ var board = [
 ["r9",0,"r10",0,"r11",0,"r12",0],
 ];
 
-var checkersStartHTML = $("#checkersTable").innerHTML;
+var checkersStartHTML;
 
 var whiteScore = 0; // # Pieces White has taken from Red
 var redScore = 0; // # Pieces Red has taken from White
@@ -27,6 +27,15 @@ var pieceToRemove = 0;
 var currentTurn = 0; // 0=White, 1=Red
 
 $(function() {
+	checkersStartHTML = $("#checkersTable").html();
+	listenToBoard();
+	
+	$("#restart").click(function() {
+		startOver();
+	});
+});
+
+function listenToBoard() {
 	$(".redPiece").draggable( {
 		revert: "invalid",
 		create: function(){$(this).data('position',$(this).position())},
@@ -47,7 +56,7 @@ $(function() {
 			movePiece(ui.draggable,$(this));
 		}
 	});
-});
+}
 
 // =============== Process Move =============== //
 
@@ -149,14 +158,16 @@ function startOver() {
 		[0,"r5",0,"r6",0,"r7",0,"r8"],
 		["r9",0,"r10",0,"r11",0,"r12",0],
 		];
-		
-	$("#checkersTable").innerHTML = checkersStartHTML;
+	
+	$("#checkersTable").html(checkersStartHTML);
+	listenToBoard();
 		
 	whiteScore = 0;
 	redScore = 0;
 	winnerString = "";
 	pieceToRemove = 0
 	currentTurn = 0;
+	updateCheckersUI();
 }
 
 function checkValidMoveKeepPieceToRemove(piece, square) {

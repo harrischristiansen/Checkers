@@ -16,14 +16,14 @@ HTML, CSS, Javascript
 - [X] Display Scores
 - [X] Alternate Moves
 - [X] Promotion To Kings
-- [ ] Check For Game Over
-- [ ] Restart Game Button
+- [X] Check For Game Over
+- [X] Restart Game Button
 - [ ] Serve Ads
 - [ ] Google Analytics
 
 ## Contributors
 
-@harrischristiansen (http://www.harrischristiansen.com) (christih@purdue.edu)
+@harrischristiansen (http://www.harrischristiansen.com) (christih@purdue.edu)  
 @watthemehak (http://watthemehak.com)
 
 ## License
